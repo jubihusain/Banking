@@ -1,0 +1,83 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Alpha-account</title>
+    <link href="{% static 'home/style.css' %}" rel="stylesheet" media="all">
+
+</head>
+<body style="background-color:#FFA07A;">
+  
+
+<h2 style="text-align:center;color:#8B0000">Account Form</h2>
+
+<form style="text-align:center;" onsubmit="validateForm()" name="account" action="submit"  class="post-form" enctype="multipart/form-data" method="POST" id="personForm" data-branches-url="{% url 'ajax_load_branches' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="form-group">
+        <button class="btn btn-success">Submit</button>
+
+        <button><a href="logout">Logout</a> </button>
+    </div>
+
+</form>
+
+
+
+{% block content %}
+    {% endblock content %}
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_district").change(function () {
+        const url = $("#personForm").attr("data-branches-url");
+        const districtId = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+                'district_id': districtId
+            },
+            success: function (data) {
+                $("#id_branch").html(data);
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (branch) {
+                    html_data += `<option value="${branch.id}">${branch.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_branch").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
+
+
+<script>
+  function validateForm() {
+    var user = document.forms["account"]["name"].value;
+        if (user == ""|| user=null)
+		{
+		alert("Please enter name")
+		}
+
+			}
+</script>
+
+
+
+
+</body>
+</html>
